@@ -1,20 +1,36 @@
 package com.educandoweb.course.resources;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.educandoweb.course.entities.User;
+import com.educandoweb.course.services.UserService;
 
 @RestController                       // RecursoWeb implementado por um controlador Rest.
 @RequestMapping(value = "/users")     // Nome do recurso
 public class UserResource {
 	
-	                     // Método EndPoint para acessar os usuários.
-	@GetMapping                               // Anotação para indicar responde ao metodo get http
-	public ResponseEntity<User> findAll(){    // Tipo específico do Spring para retornar requisições web.
-		User u = new User(1L, "Maria", "maria@gmail.com", "9999999", "12345");
-		return ResponseEntity.ok().body(u);   //Retorna resposta com sucesso http e o corpo da resposta u.
+	@Autowired	                       // Para que o Spring faça a dependência
+	private UserService service;   // Dependencia para o UserService
+	
+	// Método EndPoint para acessar os usuários.
+	@GetMapping                                   // Anotação para indicar responde ao metodo get http
+	public ResponseEntity<List<User>> findAll(){  // Tipo específico do Spring para retornar requisições web.
+		List<User> list = service.findAll();
+		return ResponseEntity.ok().body(list);    //Retorna resposta com sucesso http e o corpo da resposta u.
 }
+	
+	// Método EndPoint para acessar um usuário pelo Id.
+	@GetMapping(value = "/{id}")                                 // Indica que a requisição aceita um Id dentro da url.
+	public ResponseEntity<User> findById(@PathVariable Long id){ //Tem q colocar a anotação para o Spring aceitar o Id que vai chegar na url
+		User obj = service.findById(id);
+		return ResponseEntity.ok().body(obj);
+	}
+	
 }
