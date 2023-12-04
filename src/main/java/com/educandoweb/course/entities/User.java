@@ -3,10 +3,20 @@ package com.educandoweb.course.entities;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity					 // Anotação para instruir o jpa a transformar o modelo objeto para relacional.
+@Table(name = "tb_user") // Especifica o nome da tabela no BD como tb_user
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	@Id                                                   // Especifica o Id como chave primária.
+	@GeneratedValue(strategy = GenerationType.IDENTITY)   // Para que o Id seja auto-incrementado.
 	private Long id;
 	private String name;
 	private String email;
