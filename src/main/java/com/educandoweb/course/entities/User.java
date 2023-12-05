@@ -1,16 +1,19 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity					 // Anotação para instruir o jpa a transformar o modelo objeto para relacional.
-@Table(name = "tb_user") // Especifica o nome da tabela no BD como tb_user
+@Table(name = "tb_user") // Especifica o nome da tabela no BD como tb_user, para não entrar em conflito
 public class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -22,6 +25,9 @@ public class User implements Serializable{
 	private String email;
 	private String phone;
 	private String password;
+	
+	@OneToMany(mappedBy = "client")                  // Um para muitos, mapeado com o client
+	private List<Order> orders = new ArrayList<>();  // Associação com o pedido e já instancia. Cria só get
 	
 	public User() {		
 	}
@@ -74,6 +80,11 @@ public class User implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	// Cria só o método get da lista. Pois a lista não pode ser trocada. Apenas add e remove elementos.
+	public List<Order> getOrders() {
+		return orders;
+		}
 
 	@Override
 	public int hashCode() {
@@ -90,8 +101,5 @@ public class User implements Serializable{
 			return false;
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
-	}
-	
-	
-
+	}	
 }
