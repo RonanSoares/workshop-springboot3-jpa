@@ -17,11 +17,10 @@ import jakarta.persistence.Table;
 @Entity					 // Anotação para instruir o jpa a transformar o modelo objeto para relacional.
 @Table(name = "tb_user") // Especifica o nome da tabela no BD como tb_user, para não entrar em conflito
 public class User implements Serializable{
-
 	private static final long serialVersionUID = 1L;
 	
-	@Id                                                   // Especifica o Id como chave primária.
-	@GeneratedValue(strategy = GenerationType.IDENTITY)   // Para que o Id seja auto-incrementado.
+	@Id                                                  // Especifica o Id como chave primária.
+	@GeneratedValue(strategy = GenerationType.IDENTITY)  // Para que o Id seja auto-incrementado.
 	private Long id;
 	private String name;
 	private String email;

@@ -32,11 +32,11 @@ public class Order implements Serializable{
 	// Macete para controlar os códigos do OrderStatus (Muda o tipo de OrderStatus para Integer)
 	private Integer orderStatus;
 	
-	@ManyToOne												// Anotação Muitos p Um. Chave estrangeira. 
-	@JoinColumn(name = "client_id")							// Anotaçao para dar nome a chave estrangeira.
+	@ManyToOne							// Anotação Muitos p Um. Chave estrangeira. 
+	@JoinColumn(name = "client_id")		// Anotaçao para dar nome a chave estrangeira.
 	private User client;                                    // Associação com o Usuário(cliente)
 	
-	public Order() {										// Construtor padrão
+	public Order() {					// Construtor padrão
 	}
 
 	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {    // Construtor com argumentos.

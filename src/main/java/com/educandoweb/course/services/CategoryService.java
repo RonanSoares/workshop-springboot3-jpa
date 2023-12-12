@@ -6,23 +6,23 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.educandoweb.course.entities.User;
-import com.educandoweb.course.repositories.UserRepository;
+import com.educandoweb.course.entities.Category;
+import com.educandoweb.course.repositories.CategoryRepository;
 
 @Service                               // Registra a classe como um componente do Spring
-public class UserService {	
+public class CategoryService {	
 	
 	@Autowired                           // Para o Spring fazer injeção de dependência
-	private UserRepository repository;   // Declara a dependencia com o UserRepository
+	private CategoryRepository repository;   // Declara a dependencia com o CategoryRepository
 	
 	// Método para buscar todos os usuários
-	public List<User> findAll(){
+	public List<Category> findAll(){
 		return repository.findAll();       // Retorn todos os usuários.
 	}
 	
 	// Operação para buscar usuário por Id
-	public User findById(Long id) {
-		Optional<User> obj = repository.findById(id);         // Retorna um objeto Optional
-		return obj.get();                              // Retorna objeto User que está no obj
+	public Category findById(Long id) {
+		Optional<Category> obj = repository.findById(id);         // Retorna um objeto Optional
+		return obj.get();                              // Retorna objeto Category que está no obj
 	}
 }
