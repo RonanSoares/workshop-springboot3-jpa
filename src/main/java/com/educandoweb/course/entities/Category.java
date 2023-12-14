@@ -5,12 +5,14 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_category")
@@ -23,9 +25,10 @@ public class Category implements Serializable{
 	private Long id;
 	private String nome;
 	
-	//@JsonIgnore                          //Para corrigir as associações bidirecional e não ficar em loop
-	//@ManyToMany(mappedBy = "categories") // Mapeamento referência para a coleção da classe Product
-	@Transient
+	//Para corrigir as associações bidirecional e não ficar em loop
+	// Mapeamento referência para a coleção da classe Product
+	@JsonIgnore
+	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	
 	public Category() {		
