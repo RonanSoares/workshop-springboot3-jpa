@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-@Entity                       // Mapeamento JPA
+@Entity
 @Table(name = "tb_product")
 public class Product implements Serializable{
 
@@ -24,23 +24,22 @@ public class Product implements Serializable{
 	private String name;
 	private String description;
 	private Double price;
-	private String imagUrl;
+	private String imgUrl;
 	
-	// Associação com a categoria. Não será uma lista, mas sim o Set, que garante não ter um produto com mais de uma categoria
 	@Transient
-	private Set<Category> categories = new HashSet<>();
+	private Set<Category> categories = new HashSet<>(); // Instancia para q a coleção inicie vazia e não nula.
 	
 	public Product() {		
 	}
 	
 	// Construtor. Coleções (Category) não entra, ja está instanciada acima.
-	public Product(Long id, String name, String description, Double price, String imagUrl) {
+	public Product(Long id, String name, String description, Double price, String imgUrl) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
-		this.imagUrl = imagUrl;
+		this.imgUrl = imgUrl;
 	}
 
 	public Long getId() {
@@ -75,15 +74,14 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 
-	public String getImagUrl() {
-		return imagUrl;
+	public String getImgUrl() {
+		return imgUrl;
 	}
 
-	public void setImagUrl(String imagUrl) {
-		this.imagUrl = imagUrl;
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
-	
-	// Método Set é apagado. Fica apenas o Get
+
 	public Set<Category> getCategories() {
 		return categories;
 	}

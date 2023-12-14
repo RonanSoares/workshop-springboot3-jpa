@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.services.ProductService;
 
-@RestController                          // RecursoWeb implementado por um controlador Rest.
+@RestController                       // RecursoWeb implementado por um controlador Rest.
 @RequestMapping(value = "/products")     // Nome do recurso
 public class ProductResource {
 	

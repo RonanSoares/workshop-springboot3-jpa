@@ -23,6 +23,8 @@ public class Category implements Serializable{
 	private Long id;
 	private String nome;
 	
+	//@JsonIgnore                          //Para corrigir as associações bidirecional e não ficar em loop
+	//@ManyToMany(mappedBy = "categories") // Mapeamento referência para a coleção da classe Product
 	@Transient
 	private Set<Product> products = new HashSet<>();
 	
@@ -54,7 +56,7 @@ public class Category implements Serializable{
 	// Fica apenas o método Get. Pois a coleção não pode ser trocada, apenas remover e incluir.
 	public Set<Product> getProducts() {
 		return products;
-	}
+	}	
 
 	@Override
 	public int hashCode() {
@@ -71,9 +73,5 @@ public class Category implements Serializable{
 			return false;
 		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
-	}
-
-	
-	
-	
+	}	
 }

@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
 
-@Service                                    // Registra a classe como um componente do Spring
+@Service                               // Registra a classe como um componente do Spring
 public class ProductService {	
 	
-	@Autowired                              // Para o Spring fazer injeção de dependência
+	@Autowired                           // Para o Spring fazer injeção de dependência
 	private ProductRepository repository;   // Declara a dependencia com o ProductRepository
 	
 	// Método para buscar todos os usuários
 	public List<Product> findAll(){
-		return repository.findAll();        // Retorn todos os Produtos.
+		return repository.findAll();       // Retorn todos os usuários.
 	}
 	
 	// Operação para buscar usuário por Id
 	public Product findById(Long id) {
-		Optional<Product> obj = repository.findById(id);   // Retorna um objeto Optional
-		return obj.get();                                  // Retorna objeto Product que está no obj
+		Optional<Product> obj = repository.findById(id);         // Retorna um objeto Optional
+		return obj.get();                              // Retorna objeto Product que está no obj
 	}
 }
