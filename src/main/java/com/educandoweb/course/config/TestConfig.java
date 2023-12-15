@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Order;
+import com.educandoweb.course.entities.OrderItem;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.educandoweb.course.repositories.CategoryRepository;
+import com.educandoweb.course.repositories.OrderItemRepository;
 import com.educandoweb.course.repositories.OrderRepository;
 import com.educandoweb.course.repositories.ProductRepository;
 import com.educandoweb.course.repositories.UserRepository;
@@ -23,7 +25,7 @@ import com.educandoweb.course.repositories.UserRepository;
 @Profile("test")   // Para avisar que é uma classe especifica para o perfil de test.
 public class TestConfig implements CommandLineRunner { //implem... executa quando o programa for iniciado
 	
-	//Essa Classe tem uma dependência para o UserRepository que é responsável para povoar o BD	
+	//Essa Classe tem uma dependência para o UserRepository que é responsável para povoar o BD (Injeção)
 	@Autowired    // Anotação para que o spring faça a associação entre o userRepository e a classe TestConfig
 	private UserRepository userRepository;
 	
@@ -35,6 +37,9 @@ public class TestConfig implements CommandLineRunner { //implem... executa quand
 	
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -72,7 +77,14 @@ public class TestConfig implements CommandLineRunner { //implem... executa quand
 		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.AGUARDANDO_PAGAMENTO, u1);
 		
 		userRepository.saveAll(Arrays.asList(u1, u2));       // Salva os usuarios no BD
-		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
+		orderRepository.saveAll(Arrays.asList(o1, o2, o3));  // Salva os pedidos
+		
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+		OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 		
 	}	
 }

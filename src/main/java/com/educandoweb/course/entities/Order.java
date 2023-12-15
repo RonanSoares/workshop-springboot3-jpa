@@ -2,10 +2,13 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.educandoweb.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity										//Anotações JPA. trafegar objeto /BD relacional
@@ -35,6 +39,10 @@ public class Order implements Serializable{
 	@ManyToOne							// Anotação Muitos p Um. Chave estrangeira. 
 	@JoinColumn(name = "client_id")		// Anotaçao para dar nome a chave estrangeira.
 	private User client;                                    // Associação com o Usuário(cliente)
+	
+	@JsonIgnore               // ATENÇÃO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> items = new HashSet<>();
 	
 	public Order() {					// Construtor padrão
 	}
@@ -79,6 +87,11 @@ public class Order implements Serializable{
 
 	public void setClient(User client) {
 		this.client = client;
+	}
+	
+	// Método get do items. Criado manualmente. O Pedido agora conhece os seus items.
+	public Set<OrderItem> getItems(){
+		return items;
 	}
 
 	@Override
