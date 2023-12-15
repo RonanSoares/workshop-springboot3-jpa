@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,11 +31,13 @@ public class Product implements Serializable {
 	private Double price;
 	private String imgUrl;	
 	
-	@JsonIgnore
+	@JsonIgnore          // ATENÇÃO AO JSON IGNORE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	@ManyToMany	
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	
 	private Set<Category> categories = new HashSet<>();  // Instancia para q a coleção inicie vazia e não nula.
+	
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderItem> items = new HashSet<>();  // Método Set para informar ao JPA q não admite repetições de itens
 	
 	public Product() {
 	}
@@ -91,6 +94,16 @@ public class Product implements Serializable {
 
 	public Set<Category> getCategories() {
 		return categories;
+	}
+	
+	// Cria manualmente o método getOrders do items
+	@JsonIgnore
+	public Set<Order> getOrders(){
+		Set<Order> set = new HashSet<>();
+		for(OrderItem x : items) {
+			set.add(x.getOrder());
+		}
+		return set;
 	}
 
 	@Override

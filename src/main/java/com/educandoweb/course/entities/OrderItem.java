@@ -45,8 +45,8 @@ public class OrderItem implements Serializable{
 	}
 	
 	// Cria manualmente o Get Product
-	public void getProduct(Product product) {
-		id.setProduct(product);
+	public Product getProduct() {
+		return id.getProduct();
 	}
 		
 	// Cria manualmente o Set Product
