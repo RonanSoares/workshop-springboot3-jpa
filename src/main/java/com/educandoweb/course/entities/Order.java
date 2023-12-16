@@ -43,10 +43,11 @@ public class Order implements Serializable{
 	private User client;                // Associação com o Usuário(cliente)
 	
 
-	@JsonIgnore               // ATENÇÃO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// @JsonIgnore               // ATENÇÃO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new HashSet<>();
 	
+	@JsonIgnore                // ATENÇÃO GIT IGNORE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // Mapea as duas entidades para ter o mesmo id.
 	private Payment payment;  // Associação com classe Payment
 	
@@ -111,6 +112,15 @@ public class Order implements Serializable{
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+	
+	// Método para calcular o total do pedido. Q é a soma dos subTotais.
+	public Double getTotal() {    // Para aparecer no Json subtotal, tem q colocar "get" getTotal
+		double sum = 0.0;
+		for(OrderItem x : items) {
+			sum = sum + x.getSubTotal();
+		}
+		return sum;		
 	}
 
 	@Override

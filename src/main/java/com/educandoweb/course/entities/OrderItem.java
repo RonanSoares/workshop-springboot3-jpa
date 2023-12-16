@@ -74,6 +74,11 @@ public class OrderItem implements Serializable{
 		this.price = price;
 	}
 	
+	// Metodo para calcular o subTotal dos itens do pedido.  
+	public Double getSubTotal() {     // Para aparecer no Json subtotal, tem q colocar "get" getSubTotal
+		return price * quantity;      
+	}			
+	
 	// Métodos HasCode e Equals. Apenas o id que identifica o OrderItem
 	@Override
 	public int hashCode() {
@@ -91,7 +96,4 @@ public class OrderItem implements Serializable{
 		OrderItem other = (OrderItem) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
 }
