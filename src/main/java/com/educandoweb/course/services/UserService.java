@@ -13,6 +13,8 @@ import com.educandoweb.course.repositories.UserRepository;
 import com.educandoweb.course.services.exceptions.DatabaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service                               // Registra a classe como um componente do Spring
 public class UserService {	
 	
@@ -48,10 +50,13 @@ public class UserService {
 	
 	// Método para atualizar o usuário
 	public User update(Long id, User obj) {
-		
+		try {
 		User entity = repository.getReferenceById(id);  // Prepara o obj monitorado para vc trabalhar.
 		updateData(entity, obj);
-		return repository.save(entity);		
+		return repository.save(entity);	
+		}catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 	
 	// Método para att o usuário. Não atualiza nem o id nem a senha.
