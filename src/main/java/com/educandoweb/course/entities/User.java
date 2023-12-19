@@ -3,7 +3,6 @@ package com.educandoweb.course.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,11 +13,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Entity					 // Anotação para instruir o jpa a transformar o modelo objeto para relacional.
-@Table(name = "tb_user") // Especifica o nome da tabela no BD como tb_user, para não entrar em conflito
-public class User implements Serializable{
+@Entity                    // Anotação para instruir o jpa a transformar o modelo objeto para relacional.
+@Table(name = "tb_user")   // Especifica o nome da tabela no BD como tb_user, para não entrar em conflito
+public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id                                                  // Especifica o Id como chave primária.
 	@GeneratedValue(strategy = GenerationType.IDENTITY)  // Para que o Id seja auto-incrementado.
 	private Long id;
@@ -26,12 +25,12 @@ public class User implements Serializable{
 	private String email;
 	private String phone;
 	private String password;
+
+	@JsonIgnore                                       // Para corrigir um erro de loop entre user e order
+	@OneToMany(mappedBy = "client")                   // Um para muitos, mapeado com o client
+	private List<Order> orders = new ArrayList<>();   // Associação com o pedido e já instancia. Cria só get
 	
-	@JsonIgnore										 // Para corrigir um erro de loop entre user e order
-	@OneToMany(mappedBy = "client")                  // Um para muitos, mapeado com o client
-	private List<Order> orders = new ArrayList<>();  // Associação com o pedido e já instancia. Cria só get
-	
-	public User() {		
+	public User() {
 	}
 
 	public User(Long id, String name, String email, String phone, String password) {
@@ -86,11 +85,14 @@ public class User implements Serializable{
 	// Cria só o método get da lista. Pois a lista não pode ser trocada. Apenas add e remove elementos.
 	public List<Order> getOrders() {
 		return orders;
-		}
-
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -102,6 +104,11 @@ public class User implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(id, other.id);
-	}	
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 }

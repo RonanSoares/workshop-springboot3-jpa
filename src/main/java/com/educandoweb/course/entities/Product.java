@@ -2,7 +2,6 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +19,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -29,15 +27,14 @@ public class Product implements Serializable {
 	private String name;
 	private String description;
 	private Double price;
-	private String imgUrl;	
-	
-	@JsonIgnore          // ATENÇÃO AO JSON IGNORE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	@ManyToMany	
+	private String imgUrl;
+
+	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Set<Category> categories = new HashSet<>();  // Instancia para q a coleção inicie vazia e não nula.
-	
+	private Set<Category> categories = new HashSet<>();    // Instancia para q a coleção inicie vazia e não nula.
+
 	@OneToMany(mappedBy = "id.product")
-	private Set<OrderItem> items = new HashSet<>();  // Método Set para informar ao JPA q não admite repetições de itens
+	private Set<OrderItem> items = new HashSet<>();        // Método Set para informar ao JPA q não admite repetições de itens
 	
 	public Product() {
 	}
@@ -98,17 +95,20 @@ public class Product implements Serializable {
 	
 	// Cria manualmente o método getOrders do items
 	@JsonIgnore
-	public Set<Order> getOrders(){
+	public Set<Order> getOrders() {
 		Set<Order> set = new HashSet<>();
-		for(OrderItem x : items) {
+		for (OrderItem x : items) {
 			set.add(x.getOrder());
 		}
 		return set;
 	}
-
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -120,6 +120,11 @@ public class Product implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Product other = (Product) obj;
-		return Objects.equals(id, other.id);
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }

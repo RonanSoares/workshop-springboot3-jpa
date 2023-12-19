@@ -18,40 +18,43 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.services.UserService;
 
-@RestController
-@RequestMapping(value = "/users")
+@RestController                     // RecursoWeb implementado por um controlador Rest.
+@RequestMapping(value = "/users")   // Nome do recurso
 public class UserResource {
 
-	@Autowired 
-	private UserService service;
+	@Autowired                      // Para que o Spring faça a dependência
+	private UserService service;    // Dependencia para o UserService
 	
-	@GetMapping
-	public ResponseEntity<List<User>> findAll() {
+	// Método EndPoint para acessar os usuários.
+	@GetMapping                                    // Anotação para indicar responde ao metodo get http
+	public ResponseEntity<List<User>> findAll() {  // Tipo específico do Spring para retornar requisições web.
 		List<User> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<User> findById(@PathVariable Long id) {
+	// Método EndPoint para acessar um usuário pelo Id.
+	@GetMapping(value = "/{id}")                                   // Indica que a requisição aceita um Id dentro da url.
+	public ResponseEntity<User> findById(@PathVariable Long id) {  //Tem q colocar a anotação para o Spring aceitar o Id que vai chegar na url
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@PostMapping
+	// Método para inserir um usuário
+	@PostMapping                                         // Qdo é inserção usa essa anotação
 	public ResponseEntity<User> insert(@RequestBody User obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(obj.getId()).toUri();
-		return ResponseEntity.created(uri).body(obj);
+		return ResponseEntity.created(uri).body(obj);    // Response para retornar o cod 201 no postman
 	}
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		service.delete(id);
-		return ResponseEntity.noContent().build();
+		service.delete(id);                              // Deleta o usuário
+		return ResponseEntity.noContent().build();       // Retornar a resposta
 	}
 	
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = "/{id}")                         // Anotação para att do usuário
 	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
