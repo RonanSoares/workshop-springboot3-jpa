@@ -1,7 +1,6 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import com.educandoweb.course.entities.pk.OrderItemPK;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,55 +11,47 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_order_item")
-public class OrderItem implements Serializable{	
-	
+public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@EmbeddedId                                  // No caso de chave composta a anotação é EmbeddedId
-	private OrderItemPK id = new OrderItemPK();  // Atributo identificador correspondente a chave primária. Chaves compostas tem que instanciar
+
+	@EmbeddedId
+	private OrderItemPK id = new OrderItemPK();
+
 	private Integer quantity;
 	private Double price;
-	
-	public OrderItem() {		
+
+	public OrderItem() {
 	}
-	
-	// Construtor o id não entra. É acrescentado manualmente o Order e Product
+
 	public OrderItem(Order order, Product product, Integer quantity, Double price) {
 		super();
-		id.setOrder(order);      // Atribui o Order nesse Item de pedido(OrderItem)
-		id.setProduct(product);  // Atribui o Product nesse Item de pedido(OrderItem)
+		id.setOrder(order);
+		id.setProduct(product);
 		this.quantity = quantity;
 		this.price = price;
 	}
-	
-	// Cria manualmente o Get Order
-	@JsonIgnore                // Para resolver a questão de mão dupla entre Pedido x Items de pedido
+
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
-	
-	// Cria manualmente o Set Order
+
 	public void setOrder(Order order) {
 		id.setOrder(order);
 	}
 	
-	// Cria manualmente o Get Product
+	//@JsonIgnore                            //ATENÇÃO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public Product getProduct() {
 		return id.getProduct();
 	}
-		
-	// Cria manualmente o Set Product
+
 	public void setProduct(Product product) {
 		id.setProduct(product);
 	}
-		
-	
-	// Métodos Get e Set, id também não entra
+
 	public Integer getQuantity() {
 		return quantity;
 	}
-	
-	
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
@@ -73,16 +64,17 @@ public class OrderItem implements Serializable{
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+
+	public Double getSubTotal() {
+		return price * quantity;
+	}
 	
-	// Metodo para calcular o subTotal dos itens do pedido.  
-	public Double getSubTotal() {     // Para aparecer no Json subtotal, tem q colocar "get" getSubTotal
-		return price * quantity;      
-	}			
-	
-	// Métodos HasCode e Equals. Apenas o id que identifica o OrderItem
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -94,6 +86,11 @@ public class OrderItem implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		OrderItem other = (OrderItem) obj;
-		return Objects.equals(id, other.id);
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }
